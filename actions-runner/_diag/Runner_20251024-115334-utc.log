@@ -244,3 +244,5 @@
 [2025-10-24 11:53:54Z ERR  BrokerServer] System.Net.Sockets.SocketException (995): L’opération d’entrée/sortie a été abandonnée en raison de l’arrêt d’un thread ou à la demande d’une application.
 [2025-10-24 11:53:54Z WARN BrokerServer] Back off 11,294 seconds before next retry. 4 attempt left.
 [2025-10-24 11:53:54Z INFO BrokerMessageListener] Get messages has been cancelled using local token source. Continue to get messages with new status.
+[2025-10-24 12:44:02Z INFO RSAEncryptedFileKeyManager] Loading RSA key parameters from file C:\Users\paulo\server\vuln-server\actions-runner\.credentials_rsaparams
+[2025-10-24 12:44:02Z INFO GitHubActionsService] AAD Correlation ID for this token request: Unknown

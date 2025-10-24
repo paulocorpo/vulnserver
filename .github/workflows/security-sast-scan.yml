@@ -19,7 +19,7 @@ jobs:
     steps:
 
       - name: 🧪 List files 1
-        run: dir /a
+        run: Get-ChildItem -Force -Recurse
 
       - name: 📥 Checkout du code
         uses: actions/checkout@v4
@@ -36,7 +36,7 @@ jobs:
           semgrep --version
       
       - name: 🧪 List files 2
-        run: dir /a
+        run: Get-ChildItem -Force -Recurse
 
       - name: 🚀 Exécution de Semgrep et génération du rapport SARIF
         run: |
@@ -47,7 +47,7 @@ jobs:
           echo "VULN_COUNT=$VULN_COUNT" >> $GITHUB_ENV
 
       - name: 🧪 List files 3
-        run: dir /a
+        run: Get-ChildItem -Force -Recurse
 
       - name: ⬆️ Upload Semgrep file as SARIF to GitHub Advanced Security
         uses: github/codeql-action/upload-sarif@v3

@@ -1,0 +1,39 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    labels:
+      - Rebuild
+    # Ignore incompatible dependency updates
+    ignore:
+      # There is a type incompatibility issue between v0.0.9 and our other dependencies.
+      - dependency-name: "@octokit/plugin-retry"
+        versions: ["~6.0.0"]
+      # This is broken due to the way configuration files have changed. 
+      # This might be fixed when we move to eslint v9.
+      - dependency-name: "eslint-plugin-import"
+        versions: [">=2.30.0"]
+    groups:
+      npm-minor:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+  - package-ecosystem: github-actions
+    directories:
+      - "/.github/workflows"
+      - "/.github/actions"
+    schedule:
+      interval: weekly
+    labels:
+      - Rebuild
+    groups:
+      actions-minor:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"

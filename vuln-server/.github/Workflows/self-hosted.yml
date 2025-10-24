@@ -1,0 +1,17 @@
+name: Hello World (Self-Hosted)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  hello:
+    runs-on: self-hosted
+
+    steps:
+      - name: Vérification du runner
+        run: echo "Runner actif sur $(hostname)"
+
+      - name: Hello World
+        run: echo "Hello World depuis le runner self-hosted ✅"

@@ -1,0 +1,11 @@
+﻿{
+  "agentId": 2,
+  "agentName": "PAULLAPTOP",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "https://pipelinesghubeus15.actions.githubusercontent.com/pznecoJ8PHBHkAiWx9MezIMkKAwdo8f3lfT0nA9XWVmMOjUOZw/",
+  "gitHubUrl": "https://github.com/Mushsystem/vulnserver",
+  "workFolder": "_work",
+  "useV2Flow": true,
+  "serverUrlV2": "https://broker.actions.githubusercontent.com/"
+}

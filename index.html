@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Vuln NodeJS Lab - Zeroday Cyber Academy</title>
+  <style>
+    body {
+      background: #0b0b0b;
+      color: #eee;
+      font-family: monospace;
+      margin: 2rem;
+    }
+    h1, h2 {
+      color: #00ff88;
+    }
+    form {
+      background: #111;
+      border: 1px solid #333;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      border-radius: 8px;
+    }
+    input, textarea {
+      width: 100%;
+      margin: 0.3rem 0;
+      padding: 0.3rem;
+      background: #222;
+      border: 1px solid #555;
+      color: #eee;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      background: #00ff88;
+      border: none;
+      cursor: pointer;
+      color: #000;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+    pre {
+      background: #111;
+      border: 1px solid #333;
+      padding: 1rem;
+      border-radius: 8px;
+      color: #0f0;
+      max-height: 300px;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Vulnérable Node.js Server Lab</h1>
+  <p>⚠️ Environnement volontairement vulnérable — usage éducatif uniquement.</p>
+
+  <hr>
+
+  <h2>1️⃣ SQL Injection (GET /user)</h2>
+  <form id="form-sqli-get">
+    <input type="text" id="sqliName" placeholder="Nom de l'utilisateur">
+    <button type="submit">Rechercher</button>
+  </form>
+  <pre id="result-sqli-get"></pre>
+
+  <h2>2️⃣ SQL Injection (POST /data)</h2>
+  <form id="form-sqli-post">
+    <input type="text" id="postName" placeholder="Nom">
+    <input type="number" id="postAge" placeholder="Âge">
+    <button type="submit">Insérer</button>
+  </form>
+  <pre id="result-sqli-post"></pre>
+
+  <h2>3️⃣ XSS Stocké (POST /message)</h2>
+  <form id="form-xss">
+    <input type="text" id="author" placeholder="Auteur">
+    <textarea id="content" placeholder="Message (HTML autorisé)"></textarea>
+    <button type="submit">Publier</button>
+  </form>
+  <a href="/messages" target="_blank">Voir les messages</a>
+  <pre id="result-xss"></pre>
+
+  <h2>4️⃣ Upload non sécurisé (POST /upload)</h2>
+  <form id="form-upload" enctype="multipart/form-data">
+    <input type="file" id="fileUpload" name="file">
+    <button type="submit">Uploader</button>
+  </form>
+  <pre id="result-upload"></pre>
+
+  <h2>5️⃣ Command Injection (GET /exec)</h2>
+  <form id="form-exec">
+    <input type="text" id="cmd" placeholder="Commande à exécuter (ex: ls)">
+    <button type="submit">Exécuter</button>
+  </form>
+  <pre id="result-exec"></pre>
+
+  <h2>6️⃣ SSRF (GET /fetch)</h2>
+  <form id="form-ssrf">
+    <input type="text" id="url" placeholder="URL cible (ex: https://example.com)">
+    <button type="submit">Fetch</button>
+  </form>
+  <pre id="result-ssrf"></pre>
+
+  <h2>7️⃣ Authentification faible (POST /login)</h2>
+  <form id="form-login">
+    <input type="text" id="loginName" placeholder="Nom">
+    <input type="password" id="loginPass" placeholder="Mot de passe">
+    <button type="submit">Connexion</button>
+  </form>
+  <a href="/admin" target="_blank">→ Accéder à /admin</a>
+  <pre id="result-login"></pre>
+
+  <h2>8️⃣ Lecture de fichier (GET /readfile)</h2>
+  <form id="form-readfile">
+    <input type="text" id="filename" placeholder="Nom du fichier (ex: ../../etc/passwd)">
+    <button type="submit">Lire</button>
+  </form>
+  <pre id="result-readfile"></pre>
+
+  <h2>9️⃣ Ping (POST /ping)</h2>
+  <form id="form-ping">
+    <input type="text" id="pingHost" placeholder="Host à ping (ex: 127.0.0.1)">
+    <button type="submit">Envoyer</button>
+  </form>
+  <pre id="result-ping"></pre>
+
+  <hr>
+  <p><a href="/info" target="_blank">[GET] /info</a> — <a href="/env" target="_blank">[GET] /env</a></p>
+
+  <script>
+    async function post(url, data) {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      return await res.text();
+    }
+
+    document.getElementById('form-sqli-get').onsubmit = async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('sqliName').value;
+      const res = await fetch(`/user?name=${encodeURIComponent(name)}`);
+      document.getElementById('result-sqli-get').textContent = await res.text();
+    };
+
+    document.getElementById('form-sqli-post').onsubmit = async (e) => {
+      e.preventDefault();
+      const res = await post('/data', {
+        name: document.getElementById('postName').value,
+        age: document.getElementById('postAge').value
+      });
+      document.getElementById('result-sqli-post').textContent = res;
+    };
+
+    document.getElementById('form-xss').onsubmit = async (e) => {
+      e.preventDefault();
+      const res = await post('/message', {
+        author: document.getElementById('author').value,
+        content: document.getElementById('content').value
+      });
+      document.getElementById('result-xss').textContent = res;
+    };
+
+    document.getElementById('form-upload').onsubmit = async (e) => {
+      e.preventDefault();
+      const fd = new FormData();
+      fd.append('file', document.getElementById('fileUpload').files[0]);
+      const res = await fetch('/upload', { method: 'POST', body: fd });
+      document.getElementById('result-upload').textContent = await res.text();
+    };
+
+    document.getElementById('form-exec').onsubmit = async (e) => {
+      e.preventDefault();
+      const cmd = document.getElementById('cmd').value;
+      const res = await fetch(`/exec?cmd=${encodeURIComponent(cmd)}`);
+      document.getElementById('result-exec').textContent = await res.text();
+    };
+
+    document.getElementById('form-ssrf').onsubmit = async (e) => {
+      e.preventDefault();
+      const u = document.getElementById('url').value;
+      const res = await fetch(`/fetch?url=${encodeURIComponent(u)}`);
+      document.getElementById('result-ssrf').textContent = await res.text();
+    };
+
+    document.getElementById('form-login').onsubmit = async (e) => {
+      e.preventDefault();
+      const res = await post('/login', {
+        name: document.getElementById('loginName').value,
+        password: document.getElementById('loginPass').value
+      });
+      document.getElementById('result-login').textContent = res;
+    };
+
+    document.getElementById('form-readfile').onsubmit = async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('filename').value;
+      const res = await fetch(`/readfile?name=${encodeURIComponent(name)}`);
+      document.getElementById('result-readfile').innerHTML = await res.text();
+    };
+
+    document.getElementById('form-ping').onsubmit = async (e) => {
+      e.preventDefault();
+      const res = await post('/ping', {
+        host: document.getElementById('pingHost').value
+      });
+      document.getElementById('result-ping').innerHTML = res;
+    };
+  </script>
+</body>
+</html>

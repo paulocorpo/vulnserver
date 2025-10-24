@@ -1,0 +1,11 @@
+﻿{
+  "agentId": 2,
+  "agentName": "PAULLAPTOP",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "https://pipelinesghubeus3.actions.githubusercontent.com/srpMjgwpslPWLi78A9Yi5ELWvvVVEUV9JmE1i7QvtJc1pHYiSG/",
+  "gitHubUrl": "https://github.com/paulocorpo/vulnserver",
+  "workFolder": "_work",
+  "useV2Flow": true,
+  "serverUrlV2": "https://broker.actions.githubusercontent.com/"
+}

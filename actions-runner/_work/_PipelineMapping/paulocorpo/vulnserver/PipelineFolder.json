@@ -1,0 +1,12 @@
+﻿{
+  "repositoryName": "paulocorpo/vulnserver",
+  "pipelineDirectory": "vulnserver",
+  "workspaceDirectory": "vulnserver\\vulnserver",
+  "repositories": {
+    "paulocorpo/vulnserver": {
+      "repositoryPath": "vulnserver\\vulnserver",
+      "lastRunOn": "10/24/2025 13:52:03 +02:00"
+    }
+  },
+  "lastRunOn": "10/24/2025 13:53:50 +02:00"
+}
